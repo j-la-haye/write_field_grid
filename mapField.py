@@ -54,7 +54,7 @@ def rot_plots(grid,distance,angle,xo,yo,matrix):
     affine = (matrix[0:2]+matrix[3:5]+matrix[2:3]+matrix[5:6])
     
     t_grid = translate(grid,yo,xo)
-    r_grid = rotate(t_grid,angle,origin = (yo,xo))
+    r_grid = rotate(t_grid,angle,origin=(yo,xo))
     
     plots = list(polygonize(r_grid))
     
@@ -76,7 +76,7 @@ def rot_plots(grid,distance,angle,xo,yo,matrix):
 
 def rotate_plots(grid,distance,xo,yo):
     #polygons = []
-    t_grid = translate(grid,yo,xo)
+    t_grid = translate(grid,xo,yo)
      
     r_grid = rotate(t_grid,angle,origin =(xo,yo))
    
