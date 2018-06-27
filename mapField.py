@@ -85,14 +85,14 @@ def plot_buffer(polygons,grid):
     ax.set_axis_on()
    
    
-def read_csv(in_csv):
+def read_csv(in_csv,index_name):
     data = {}
-    data['test_num'] = []
+    data[index_name] = []
     with open(in_csv) as f:
         reader = csv.reader(f)
         next(reader)
         for line in reader:
-            data['test_num'].append(line[0])
+            data[index_name].append(line[0])
     return data
            
 def write_shapes(poly,grid,out_dest,index_name,data):
@@ -104,7 +104,7 @@ def write_shapes(poly,grid,out_dest,index_name,data):
         for i in poly:
             ds_dst.write({'geometry': mapping(i), 
                          'properties': {'id': c,
-                         'test_num':data.get('test_num')[c]},
+                         index_name:data.get(index_name)[c]},
                         })  
             c+=1
             
@@ -114,8 +114,8 @@ def makeGrid(x,y,dx,dy,xo,yo,distance,angle,matrix,out_dest,index_name,in_csv):
    
     grid,agrid = grid_dim(x,y,dx,dy,matrix)
     apoly,poly = rot_plots(grid,distance,angle,xo,yo,matrix) 
-    data = read_csv(in_csv)
-    write_shapes(apoly,agrid,out_dest,index_name,data)
+    data = read_csv(in_csv,index_name)
+    #write_shapes(apoly,agrid,out_dest,index_name,data)
     #plt_polygons = plot_buffer(poly,agrid)
    
     return apoly,poly
