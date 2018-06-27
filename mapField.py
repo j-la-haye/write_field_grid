@@ -27,7 +27,7 @@ def grid_dim(x,y,dx,dy,matrix):
     v_trans = [affine_transform(LineString(i),affine) for i in vlines ]
     
     agrid = MultiLineString(v_trans+h_trans)
-    ngrid = MultiLineString(vlines+hlines)
+    ngrid = MultiLineString(hlines+vlines)
        
     return ngrid,agrid
 
