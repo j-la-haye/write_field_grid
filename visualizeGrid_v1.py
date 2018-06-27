@@ -29,7 +29,7 @@ from mapField import grid_dim as grid_dim
 import fiona
 from fiona.crs import from_epsg
 
-def read_bands(red,nir):
+def read_bands(red,nir,outfile):
     
     with rasterio.open(red) as red:
         RED = red.read()
@@ -41,7 +41,6 @@ def read_bands(red,nir):
 
     ndvi = (NIR.astype(float)-RED.astype(float))/(NIR+RED)
     
-    outfile='Bands/ndvi.tif'
     profile = red.meta
     profile.update(driver='GTiff')
     profile.update(dtype=rasterio.float32)
