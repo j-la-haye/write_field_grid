@@ -99,7 +99,7 @@ def aoi_zoom(minx,maxx,miny,maxy,img):
     ax.set_aspect(1)
     plt.xticks(rotation=45,horizontalalignment='right')
     ax.grid(b=True, which='major', color='w', linewidth=0.8)
-    ax.grid(b=True, which='minor', color='w', linewidth=0.5)
+    #ax.grid(b=True, which='minor', color='w', linewidth=0.6)
     ax.set_axis_on()
     ax.xaxis.label.set_color('white')
     ax.yaxis.label.set_color('white')
@@ -134,7 +134,7 @@ def plot_grid(multi_polygon,img):
     patches = []
     for idx, p in enumerate(mp):
         colour = cm(1. * idx / num_colours)
-        patches.append(PolygonPatch(p, fc=colour, ec='#5FFF5F', alpha=0.75, zorder=1))
+        patches.append(PolygonPatch(p, fc=colour, ec='#5FFF5F', alpha=0.65, zorder=1))
 
 
     ax.add_collection(PatchCollection(patches, match_original=True))
@@ -148,9 +148,9 @@ def plot_grid(multi_polygon,img):
     ax.yaxis.label.set_color('white')
     plt.xticks(rotation=45,horizontalalignment='right')
     ax.grid(b=True, which='major', color='w', linewidth=0.8)
-    ax.grid(b=True, which='minor', color='w', linewidth=0.5)
-    ax.get_xaxis().set_minor_locator(mpl.ticker.AutoMinorLocator())
-    ax.get_yaxis().set_minor_locator(mpl.ticker.AutoMinorLocator())
+    #ax.grid(b=True, which='minor', color='w', linewidth=0.5)
+    #ax.get_xaxis().set_minor_locator(mpl.ticker.AutoMinorLocator())
+    #ax.get_yaxis().set_minor_locator(mpl.ticker.AutoMinorLocator())
     ax.tick_params(axis='x', colors='white')
     ax.tick_params(axis='y', colors='white')
     plt.title("Shapefile",color='#FFFFFF')
