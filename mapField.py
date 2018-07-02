@@ -1,17 +1,23 @@
 
+import os
+import numpy as np
+import geopandas as gpd
+import csv
+import fiona
+
 from shapely.geometry.polygon import Polygon 
 from shapely.ops import polygonize
 from shapely.geometry import (mapping,shape,LineString,
                               MultiLineString,CAP_STYLE,JOIN_STYLE,Polygon)
 from shapely.affinity import rotate,affine_transform,translate
-import numpy as np
 from matplotlib import pyplot as plt
-import csv
-import fiona
 from rasterstats import zonal_stats
 from collections import OrderedDict
-import geopandas as gpd
-import os
+from bokeh.palettes import Viridis6 as palette
+from bokeh.io import show
+from bokeh.models import LogColorMapper,HoverTool
+from bokeh.palettes import Viridis6 as palette
+from bokeh.plotting import figure,output_notebook,ColumnDataSource,output_file
 
 
 
@@ -161,13 +167,74 @@ def calc_zonal_stats(input_shapefile,input_raster,stats,output_shapefile):
                 for key in zs[c]:
                     prop.update({key:round(zs[c][key],2)})
                 i['properties'].update(prop)
+                c+=1
                 output.write({'properties':i['properties'],'geometry': mapping(shape(i['geometry']))})
-    
+                
+                
     data = gpd.read_file(output_shapefile)
     dt = data.head(n=len(data))
     return prop,dt
 
+def viz_zone_stat(input_shapefile,poly,uid):
+    
+    try:
+        os.remove('ndvi_stats.html')
+    
+    except OSError:
+        pass
+    
+    palette.reverse()
+    output_notebook()
+    output_file('ndvi_stats1.html')
+    props = OrderedDict()
+    with fiona.open(input_shapefile, 'r') as polys:
+        for i in polys:
+            prop = OrderedDict()
+            prop[i['properties'].get(uid)] = {}
+            prop[i['properties'].get(uid)].update({ stat : val  for stat , val in i['properties'].items()})
+            props.update(prop)
+            
+    
+    polyID = []
+    mndvi = []
+    std_ndvi= []
+    color_mapper = LogColorMapper(palette=palette)
+    for key in props:
+        polyID.append(props[key][uid])
+        mndvi.append(props[key]['mean']) 
+        std_ndvi.append(props[key]['std'])
 
+    px = []
+    py = []
+    for p in poly:
+        x,y = p.exterior.xy
+        x=x.tolist()
+        y=y.tolist()
+        px.append(x)
+        py.append(y)
+
+    source = ColumnDataSource(data=OrderedDict(
+        tid=polyID,mndvi=mndvi,stdndvi=std_ndvi,x=px,y=py))
+
+    TOOLS = "pan,wheel_zoom,reset,hover,save"
+
+    TOOLTIPS=[
+       ((uid), "@tid"), 
+        ("Mean NDVI", "@mndvi"), 
+        ("Std. NDVI", "@stdndvi")]
+
+
+    p = figure(plot_width=500, plot_height=500,title="Zonal Statistics")
+    
+    #p.hover.point_policy = "follow_mouse"
+    
+    "fill color", "$color[hex, swatch]:fill_color"
+    plots = p.patches('x', 'y', source=source,
+              fill_color={'field': 'mndvi', 'transform': color_mapper},
+              fill_alpha=0.7, line_color="black", line_width=0.5)
+
+    p.add_tools(HoverTool(tooltips=TOOLTIPS, mode='mouse'))
+    show(p)
 # Function to define, save field plot polygons to a raster file
 
 def makeGrid(x,y,dx,dy,xo,yo,distance,angle,matrix,out_dest,in_csv,index_name):
