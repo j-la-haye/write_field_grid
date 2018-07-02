@@ -68,14 +68,15 @@ def plot_bands(band):
     ax.set_yticks(np.around(np.arange(0,7000,500),0))
     ax.set_aspect(1)
     ax.set_axis_on()
-    ax.xaxis.label.set_color('white')
-    ax.yaxis.label.set_color('white')
+    ax.xaxis.label.set_color('grey')
+    ax.yaxis.label.set_color('grey')
     ax.tick_params(axis='x', colors='white')
     ax.tick_params(axis='y', colors='white')
     plt.title("NDVI Band",color='#FFFFFF')
-    ax.xaxis.label.set_color('white')
-    ax.yaxis.label.set_color('white')
+    ax.xaxis.label.set_color('grey')
+    ax.yaxis.label.set_color('grey')
     show(ndvi,ax,cmap='RdYlGn')
+    plt.savefig('Results/ndvi_full.png',alpha=True,dpi=300)
     return affine
 
 def aoi_zoom(minx,maxx,miny,maxy,img):
@@ -108,11 +109,10 @@ def aoi_zoom(minx,maxx,miny,maxy,img):
     ax.tick_params(axis='y', colors='white')
     plt.title("NDVI Band",color='#FFFFFF')
     show(img,ax,cmap='RdYlGn')
-    plt.savefig('imgzoom.png',alpha=True,dpi=300)
-    
-    return img,minx,maxx,miny,maxy
+    #plt.savefig('imgzoom.png',alpha=True,dpi=300)
 
-def plot_grid(multi_polygon,img):
+
+def plot_poly(multi_polygon,img):
     
     mp=MultiPolygon([feature for feature in multi_polygon])
     patches=[PolygonPatch(feature, edgecolor="#FFFFFF", facecolor="#555555", linewidth=2) 

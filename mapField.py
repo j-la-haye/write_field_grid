@@ -13,7 +13,6 @@ from shapely.affinity import rotate,affine_transform,translate
 from matplotlib import pyplot as plt
 from rasterstats import zonal_stats
 from collections import OrderedDict
-from bokeh.palettes import Viridis6 as palette
 from bokeh.io import show
 from bokeh.models import LogColorMapper,HoverTool
 from bokeh.palettes import Viridis6 as palette
@@ -134,7 +133,6 @@ def write_shapes(poly,out_dest,in_csv,index_name):
     with fiona.open(out_dest, 'w', driver='GeoJSON',schema=schema, crs=('EPSG:32631')) as ds_dst:
         for i in range(len(poly)):
             prop = OrderedDict()
-            #while i < len(poly)-1 :
             for key in data:
                 prop.update({key:data.get(key)[i]})
             ds_dst.write({'geometry': mapping(poly[-(i+1)]),'properties': prop})      
@@ -165,11 +163,10 @@ def calc_zonal_stats(input_shapefile,input_raster,stats,output_shapefile):
             for i in poly:
                 prop = OrderedDict()
                 for key in zs[c]:
-                    prop.update({key:round(zs[c][key],2)})
+                    prop.update({key:round(zs[c][key],3)})
                 i['properties'].update(prop)
-                c+=1
                 output.write({'properties':i['properties'],'geometry': mapping(shape(i['geometry']))})
-                
+                c+=1
                 
     data = gpd.read_file(output_shapefile)
     dt = data.head(n=len(data))
@@ -193,7 +190,15 @@ def viz_zone_stat(input_shapefile,poly,uid):
             prop[i['properties'].get(uid)] = {}
             prop[i['properties'].get(uid)].update({ stat : val  for stat , val in i['properties'].items()})
             props.update(prop)
-            
+    
+    px = []
+    py = []
+    for i in poly:
+        x,y = i.exterior.xy
+        x=x.tolist()
+        y=y.tolist()
+        px.append(x)
+        py.append(y)
     
     polyID = []
     mndvi = []
@@ -204,14 +209,6 @@ def viz_zone_stat(input_shapefile,poly,uid):
         mndvi.append(props[key]['mean']) 
         std_ndvi.append(props[key]['std'])
 
-    px = []
-    py = []
-    for p in poly:
-        x,y = p.exterior.xy
-        x=x.tolist()
-        y=y.tolist()
-        px.append(x)
-        py.append(y)
 
     source = ColumnDataSource(data=OrderedDict(
         tid=polyID,mndvi=mndvi,stdndvi=std_ndvi,x=px,y=py))
@@ -241,7 +238,7 @@ def makeGrid(x,y,dx,dy,xo,yo,distance,angle,matrix,out_dest,in_csv,index_name):
    
     grid,agrid = grid_dim(x,y,dx,dy,matrix)
     apoly,poly,grid = rot_plots(grid,distance,angle,xo,yo,matrix) 
-    #write_shapes(apoly,out_dest,in_csv,index_name)
+    write_shapes(apoly,out_dest,in_csv,index_name)
     #plt_polygons = plot_buffer(poly,agrid)
    
     return apoly,poly
