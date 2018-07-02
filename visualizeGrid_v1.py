@@ -24,7 +24,6 @@ import mapField
 from mapField import plot_buffer as plot_buffer
 from mapField import plot_grid as plot_grid
 from mapField import makeGrid as makeGrid
-#from mapField import rotate_plots as rotate_plots
 from mapField import grid_dim as grid_dim
 import fiona
 from fiona.crs import from_epsg
@@ -103,12 +102,13 @@ def aoi_zoom(minx,maxx,miny,maxy,img):
     ax.set_axis_on()
     ax.xaxis.label.set_color('white')
     ax.yaxis.label.set_color('white')
-    ax.get_xaxis().set_minor_locator(mpl.ticker.AutoMinorLocator())
-    ax.get_yaxis().set_minor_locator(mpl.ticker.AutoMinorLocator())
+    #ax.get_xaxis().set_minor_locator(mpl.ticker.AutoMinorLocator())
+    #ax.get_yaxis().set_minor_locator(mpl.ticker.AutoMinorLocator())
     ax.tick_params(axis='x', colors='white')
     ax.tick_params(axis='y', colors='white')
     plt.title("NDVI Band",color='#FFFFFF')
     show(img,ax,cmap='RdYlGn')
+    plt.savefig('imgzoom.png',alpha=True,dpi=300)
     
     return img,minx,maxx,miny,maxy
 
@@ -134,7 +134,7 @@ def plot_grid(multi_polygon,img):
     patches = []
     for idx, p in enumerate(mp):
         colour = cm(1. * idx / num_colours)
-        patches.append(PolygonPatch(p, fc=colour, ec='#5FFF5F', alpha=0.65, zorder=1))
+        patches.append(PolygonPatch(p, fc=colour, ec='red', alpha=0.65, zorder=1))
 
 
     ax.add_collection(PatchCollection(patches, match_original=True))
@@ -154,6 +154,6 @@ def plot_grid(multi_polygon,img):
     ax.tick_params(axis='x', colors='white')
     ax.tick_params(axis='y', colors='white')
     plt.title("Shapefile",color='#FFFFFF')
-    #plt.savefig('data/london_from_shp.png', alpha=True, dpi=300)
     show(img,ax, cmap='RdYlGn')
+    #plt.savefig('Field_Plot.png', alpha=True, dpi=300)
     plt.show()
