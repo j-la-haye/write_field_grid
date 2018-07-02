@@ -10,3 +10,4 @@ be overlayed on an input ortho-photo.
 visualizeGrid - takes the output of makeGrid as input and overlays it on an input NDVI ortho-photo that is calculated from 
 an input red and NIR geoTiff orthophoto. Zonal-statistics are then calculated by the overlaid polygon shapefile and written
 to the shapefile as attributes. The script then displays the results of the zonal statistic calculation in an interactive plot. 
+
