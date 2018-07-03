@@ -13,5 +13,6 @@ to the shapefile as attributes. The script then displays the results of the zona
 
 calc_field_plots - Defines an Object base Image analysis approach to defining field boundaries. 
 
+![alt text](https://github.com/j-la-haye/write_field_grid/blob/master/Plot_buffd-deg.png)
 
 ![alt text](https://github.com/j-la-haye/write_field_grid/blob/master/TierII-Dectected_Plots.png)
