@@ -11,7 +11,8 @@ visualizeGrid - takes the output of makeGrid as input and overlays it on an inpu
 an input red and NIR geoTiff orthophoto. Zonal-statistics are then calculated by the overlaid polygon shapefile and written
 to the shapefile as attributes. The script then displays the results of the zonal statistic calculation in an interactive plot. 
 
-calc_field_plots - Defines an Object base Image analysis approach to defining field boundaries. 
+calc_field_plots & OBIA_Plot_Detection - Defines an Object based Image analysis approach to defining field boundaries and 
+writes indexed plots to a vector file. 
 
 ![alt text](https://github.com/j-la-haye/write_field_grid/blob/master/Plot_buffd-deg.png)
 
