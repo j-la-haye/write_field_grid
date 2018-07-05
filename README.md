@@ -17,3 +17,5 @@ writes indexed plots to a vector file.
 ![alt text](https://github.com/j-la-haye/write_field_grid/blob/master/Plot_buffd-deg.png)
 
 ![alt text](https://github.com/j-la-haye/write_field_grid/blob/master/TierII-Dectected_Plots.png)
+
+![alt text](https://github.com/j-la-haye/write_field_grid/blob/master/TII-obia-plots.png)
